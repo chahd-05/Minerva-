@@ -1,4 +1,4 @@
-CREATE DATABASE minerva;
+CREATE DATABASE if NOT EXISTS minerva;
 USE minerva;
 
 CREATE TABLE users (
@@ -10,6 +10,16 @@ role ENUM('student','teacher') NOT NULL,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+
+
+CREATE TABLE classrooms (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100) NOT NULL,
+teacher_id INT NOT NULL,
+FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
 CREATE TABLE classroom_students (
     classroom_id INT NOT NULL,
     student_id INT NOT NULL,
@@ -19,12 +29,6 @@ CREATE TABLE classroom_students (
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE classrooms (
-id INT AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100) NOT NULL,
-teacher_id INT NOT NULL,
-FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE
-);
 
 CREATE TABLE works (
 id INT AUTO_INCREMENT PRIMARY KEY,
