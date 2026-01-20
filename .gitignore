@@ -1,2 +1,4 @@
 .vscode
 test_db_connection.php
+vendor
+

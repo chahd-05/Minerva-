@@ -1,0 +1,13 @@
+{
+    "name": "tairyaakoub/minerva",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [{
+        "name": "Yaakoub tair",
+        "email": "yaakoubt05@gmail.com"
+    }],
+    "require": {}
+}
