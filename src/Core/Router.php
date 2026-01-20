@@ -22,19 +22,15 @@ class Router{
         $path=$this->request->getPath();
         $method=$this->request->getMethod();
         
-        // Try exact match first
         $callback=$this->routes[$method][$path] ?? false;
         
-        // If no exact match, try pattern matching for routes with parameters
         if (!$callback) {
             foreach ($this->routes[$method] as $route => $routeCallback) {
-                // Convert route pattern to regex
                 $pattern = preg_replace('/\{[^}]+\}/', '([^/]+)', $route);
                 $pattern = '#^' . $pattern . '$#';
                 
                 if (preg_match($pattern, $path, $matches)) {
                     $callback = $routeCallback;
-                    // Remove the full match from matches
                     array_shift($matches);
                     break;
                 }
@@ -48,7 +44,7 @@ class Router{
     }
 
     if (is_callable($callback)) {
-        call_user_func($callback, $path);
+        call_user_func($callback);
         return;
     }
 
@@ -56,7 +52,6 @@ class Router{
         $controllerName = $callback[0];
         $methodName = $callback[1];
 
-        // Ajout du namespace pour les contrôleurs
         $fullControllerName = 'App\\Controllers\\' . $controllerName;
 
         $controller = new $fullControllerName();
