@@ -10,6 +10,7 @@ use App\Controllers\StudentController;
 $app = new Application();
 
 $app->router->get('/', ['AuthController', 'showLogin']);
+$app->router->post('/', ['AuthController', 'login']);
 $app->router->get('/login', ['AuthController', 'showLogin']);
 $app->router->post('/login', ['AuthController', 'login']);
 $app->router->get('/logout', ['AuthController', 'logout']);
