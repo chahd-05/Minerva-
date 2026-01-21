@@ -13,6 +13,8 @@
         .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .card h3 { color: #333; margin-bottom: 15px; }
+        .card a { text-decoration: none; color: #333; }
+        .card a:hover h3 { color: #007bff; }
         .logout { float: right; background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px; }
         .logout:hover { background: #c82333; }
     </style>
@@ -33,8 +35,12 @@
         
         <div class="cards">
             <div class="card">
-                <h3>📚 Mes classes</h3>
-                <p>Gérez vos classes et étudiants.</p>
+                <a href="/teacher/classrooms"><h3>📚 Classes</h3></a>
+                <p>Créez et suivez des classes.</p>
+            </div>
+            <div class="card">
+                <a href="/teacher/students/create"><h3>👥 Étudiants</h3></a>
+                <p>Créez des comptes étudiants.</p>
             </div>
             <div class="card">
                 <h3>📝 Devoirs</h3>

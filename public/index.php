@@ -2,6 +2,10 @@
 session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Charger les variables d'environnement depuis .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+
 use App\Core\Application;
 use App\Controllers\AuthController;
 use App\Controllers\TeacherController;
@@ -22,6 +26,8 @@ $app->router->get('/student/dashboard', ['StudentController', 'dashboard']);
 
 $app->router->get('/teacher/classrooms', ['ClassController', 'index']);
 $app->router->post('/teacher/classrooms/store', ['ClassController', 'store']);
+$app->router->get('/teacher/students/create', ['StudentController', 'create']);
+$app->router->post('/teacher/students/store', ['StudentController', 'store']);
 
 $app->run();
 
