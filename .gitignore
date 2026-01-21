@@ -3,3 +3,7 @@ test_db_connection.php
 vendor
 
 test.sql
+.htaccess
+composer.json
+composer.lock
+README.md   
