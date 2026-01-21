@@ -22,8 +22,9 @@
     <div class="container">
         <div class="header">
             <h1>👥 Créer un étudiant</h1>
-            <a href="/teacher/dashboard" class="back-link">← Retour au tableau de bord</a>
+            
         </div>
+        <a href="/teacher/dashboard" class="back-link">← Retour au tableau de bord</a>  
         
         <div class="form-card">
             <?php if (isset($_SESSION['success'])): ?>

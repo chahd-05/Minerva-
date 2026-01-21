@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Services\StudentService;
 use App\Services\AuthService;
 use App\Services\ClassService;
+use PDOException;
 
 class StudentController {
     private $studentService;
@@ -43,7 +44,7 @@ class StudentController {
             
             header("Location: /teacher/students/create");
             exit;
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             die("Erreur lors de la création: " . $e->getMessage());
         }
     }
