@@ -43,12 +43,16 @@
                 <p>Créez des comptes étudiants.</p>
             </div>
             <div class="card">
-                <a href="/teacher/create-work"><h3>📝 Devoirs</h3></a>
-                <p>Créez et suivez les devoirs.</p>
+                <a href="/teacher/creatework"><h3>📝 Créer un devoir</h3></a>
+                <p>Créez de nouveaux devoirs pour vos classes.</p>
             </div>
             <div class="card">
-                <h3>📊 Notes</h3>
-                <p>Consultez et évaluez les travaux.</p>
+                <a href="/teacher/assignwork"><h3>🎯 Assigner un devoir</h3></a>
+                <p>Assignez les devoirs aux étudiants.</p>
+            </div>
+            <div class="card">
+                <a href="/teacher/grade"><h3>📊 Noter les travaux</h3></a>
+                <p>Notez les travaux soumis par vos étudiants.</p>
             </div>
         </div>
     </div>

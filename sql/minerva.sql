@@ -37,8 +37,16 @@ classroom_id INT NOT NULL,
 title VARCHAR(150) NOT NULL,
 description TEXT,
 deadline DATE,
+file_path VARCHAR(255),
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (classroom_id) REFERENCES classrooms(id) ON DELETE CASCADE
+);
+CREATE TABLE work_assignments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    work_id INT,
+    student_id INT,
+    FOREIGN KEY (work_id) REFERENCES works(id),
+    FOREIGN KEY (student_id) REFERENCES users(id)
 );
 
 CREATE TABLE submissions (

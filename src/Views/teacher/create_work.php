@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Créer un étudiant</title>
+    <title>Créer un devoir</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
         .container { max-width: 800px; margin: 0 auto; }
@@ -34,7 +34,14 @@
                 <?php unset($_SESSION['success']); ?>
             <?php endif; ?>
             
-            <form method="POST" action="/teacher/create-work">
+            <?php if (isset($_SESSION['error'])): ?>
+                <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                    ❌ <?= htmlspecialchars($_SESSION['error']) ?>
+                </div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+            
+            <form method="POST" action="" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="title">Titre du devoir</label>
                     <input type="text" id="title" name="title" required placeholder="Ex: Devoir de mathématiques">
@@ -51,8 +58,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="class_id">Classe</label>
-                    <select id="class_id" name="class_id" required>
+                    <label for="classroom_id">Classe</label>
+                    <select id="classroom_id" name="classroom_id" required>
                         <option value="">-- Choisir une classe --</option>
                         <?php if ($classes): ?>
                             <?php foreach ($classes as $class): ?>
@@ -62,6 +69,12 @@
                             <option value="">Aucune classe disponible</option>
                         <?php endif; ?>
                     </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="file">Fichier (optionnel)</label>
+                    <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.txt">
+                    <small style="color: #666; font-size: 12px;">Formats acceptés : PDF, DOC, DOCX, TXT</small>
                 </div>
                 
                 <button type="submit" class="btn">Créer le devoir</button>
