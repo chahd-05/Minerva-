@@ -20,7 +20,7 @@ class StudentController {
     public function create() {
         $this->authService->requireRole('teacher');
         
-        // Récupérer les classes de l'enseignant
+        
         $classes = $this->classService->findByTeacherId($_SESSION['user_id']);
         
         include __DIR__ . '/../Views/teacher/create_student.php';
