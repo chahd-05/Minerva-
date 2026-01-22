@@ -43,7 +43,7 @@
                 <p>Créez des comptes étudiants.</p>
             </div>
             <div class="card">
-                <h3>📝 Devoirs</h3>
+                <a href="/teacher/create-work"><h3>📝 Devoirs</h3></a>
                 <p>Créez et suivez les devoirs.</p>
             </div>
             <div class="card">
