@@ -11,7 +11,9 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .welcome { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
         .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
+        .card a { text-decoration: none; color: inherit; display: block; }
         .card h3 { color: #333; margin-bottom: 15px; }
         .logout { float: right; background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px; }
         .logout:hover { background: #c82333; }
@@ -33,16 +35,22 @@
         
         <div class="cards">
             <div class="card">
-                <h3>📚 Mes cours</h3>
-                <p>Consultez vos cours et matières.</p>
+                <a href="/student/courses">
+                    <h3>📚 Mes cours</h3>
+                    <p>Consultez vos cours et matières.</p>
+                </a>
             </div>
             <div class="card">
-                <h3>📝 Devoirs à rendre</h3>
-                <p>Voir les devoirs en cours.</p>
+                <a href="/student/submissions">
+                    <h3>📝 Devoirs à rendre</h3>
+                    <p>Voir les devoirs en cours.</p>
+                </a>
             </div>
             <div class="card">
-                <h3>📊 Mes notes</h3>
-                <p>Consultez vos résultats.</p>
+                <a href="/student/grades">
+                    <h3>📊 Mes notes</h3>
+                    <p>Consultez vos résultats.</p>
+                </a>
             </div>
         </div>
     </div>
