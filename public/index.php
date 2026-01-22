@@ -22,6 +22,9 @@ $app->router->get('/logout', ['AuthController', 'logout']);
 
 $app->router->get('/teacher/dashboard', ['TeacherController', 'dashboard']);
 
+$app->router->get('/teacher/create-work', ['TeacherController', 'createWork']);
+$app->router->post('/teacher/create-work', ['TeacherController', 'storeWork']);
+
 $app->router->get('/student/dashboard', ['StudentController', 'dashboard']);
 $app->router->get('/student/courses', ['StudentController', 'courses']);
 $app->router->get('/student/grades', ['StudentController', 'grades']);
