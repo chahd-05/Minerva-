@@ -1,13 +1,12 @@
 <?php
 namespace App\Controllers;
 
-use App\Services\AuthService;
+use App\Core\BaseController;
 
-class AuthController {
-    private $authService;
+class AuthController extends BaseController {
     
     public function __construct() {
-        $this->authService = new AuthService();
+        parent::__construct();
     }
     
     public function showLogin() {
