@@ -25,22 +25,28 @@ class StudentController {
         include __DIR__ . '/../views/student/dashboard.php';
     }
 
-     public function courses() {
+    public function myClass() {
         $this->authService->requireRole('student');
         
         $classModel = new \App\Models\ClassRoom();
-        $classrooms = $classModel->findByStudentId($_SESSION['user_id']);
+        $studentId = $_SESSION['user_id'];
         
-        include __DIR__ . '/../views/student/courses.php';
+        // Récupérer les classes de l'étudiant
+        $classrooms = $classModel->findByStudentId($studentId);
+        
+        include __DIR__ . '/../Views/student/my_class.php';
     }
 
     public function grades() {
         $this->authService->requireRole('student');
         
         $gradeModel = new \App\Models\Grade();
-        $grades = $gradeModel->getStudentGrades($_SESSION['user_id']);
+        $studentId = $_SESSION['user_id'];
         
-        include __DIR__ . '/../views/student/grades.php';
+        // Récupérer les notes de l'étudiant
+        $grades = $gradeModel->getStudentGrades($studentId);
+        
+        include __DIR__ . '/../Views/student/grades.php';
     }
 
     public function create() {
@@ -75,22 +81,16 @@ class StudentController {
     }
 
     public function submissions() {
-        if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'student') {
-            header('Location: /login');
-            exit;
-        }
+        $this->authService->requireRole('student');
         
         $assignmentModel = new \App\Models\WorkAssignment();
-        $assignedWorks = $assignmentModel->getStudentAssignedWorks($_SESSION['user_id']);
+        $works = $assignmentModel->getStudentAssignedWorks($_SESSION['user_id']);
         
-        require __DIR__ . '/../Views/student/submissions.php';
+        include __DIR__ . '/../Views/student/submissions.php';
     }
     
     public function submit() {
-        if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'student') {
-            header('Location: /login');
-            exit;
-        }
+        $this->authService->requireRole('student');
         
         $work_id = $_POST['work_id'];
         $content = $_POST['content'];
