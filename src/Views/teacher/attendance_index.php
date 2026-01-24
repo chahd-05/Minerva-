@@ -1,5 +1,5 @@
 <?php
-$userRole = $_SESSION['role'] ?? '';
+$userRole = $_SESSION['user_role'] ?? '';
 $userName = $_SESSION['user_name'] ?? '';
 ?>
 <!DOCTYPE html>
@@ -7,7 +7,7 @@ $userName = $_SESSION['user_name'] ?? '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Classes - Minerva</title>
+    <title>Gestion des Présences - Minerva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -29,23 +29,9 @@ $userName = $_SESSION['user_name'] ?? '';
         }
         .class-card {
             transition: transform 0.2s;
-            height: 100%;
         }
         .class-card:hover {
             transform: translateY(-2px);
-        }
-        .class-card .card-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-        }
-        .create-class-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-        .create-class-card .form-control,
-        .create-class-card .form-label {
-            color: #333;
         }
     </style>
 </head>
@@ -73,8 +59,8 @@ $userName = $_SESSION['user_name'] ?? '';
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>
-                        <i class="fas fa-chalkboard me-2"></i>
-                        Mes Classes
+                        <i class="fas fa-user-check me-2"></i>
+                        Gestion des Présences
                     </h2>
                     <a href="/teacher/dashboard" class="btn btn-secondary">
                         <i class="fas fa-arrow-left me-2"></i>
@@ -103,42 +89,23 @@ $userName = $_SESSION['user_name'] ?? '';
                 <?php endif; ?>
 
                 <div class="row">
-                    <!-- Carte de création de classe -->
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card class-card create-class-card">
-                            <div class="card-header">
-                                <i class="fas fa-plus-circle me-2"></i>
-                                Créer une nouvelle classe
-                            </div>
-                            <div class="card-body">
-                                <form method="POST" action="/teacher/classrooms/store">
-                                    <div class="mb-3">
-                                        <label for="className" class="form-label">Nom de la classe</label>
-                                        <input type="text" class="form-control" id="className" name="name" required 
-                                               placeholder="Ex: Mathématiques 3ème A">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="classDescription" class="form-label">Description</label>
-                                        <textarea class="form-control" id="classDescription" name="description" rows="3"
-                                                  placeholder="Description de la classe (optionnel)"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-light btn-sm w-100">
-                                        <i class="fas fa-plus me-2"></i>
-                                        Créer la classe
-                                    </button>
-                                </form>
+                    <?php if (empty($classes)): ?>
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Vous n'avez aucune classe. 
+                                <a href="/teacher/classrooms" class="alert-link">Créez une classe d'abord</a>.
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Cartes des classes existantes -->
-                    <?php if ($classes): ?>
+                    <?php else: ?>
                         <?php foreach ($classes as $class): ?>
                             <div class="col-md-6 col-lg-4 mb-4">
-                                <div class="card class-card">
-                                    <div class="card-header">
-                                        <i class="fas fa-chalkboard me-2"></i>
-                                        <?php echo htmlspecialchars($class['name']); ?>
+                                <div class="card class-card h-100">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-chalkboard me-2"></i>
+                                            <?php echo htmlspecialchars($class['name']); ?>
+                                        </h5>
                                     </div>
                                     <div class="card-body">
                                         <p class="text-muted mb-3">
@@ -146,34 +113,21 @@ $userName = $_SESSION['user_name'] ?? '';
                                         </p>
                                         
                                         <div class="d-grid gap-2">
-                                            <a href="/teacher/classrooms/assign-students?id=<?php echo $class['id']; ?>" 
-                                               class="btn btn-info btn-sm">
-                                                <i class="fas fa-users me-2"></i>
-                                                Gérer les étudiants
-                                            </a>
                                             <a href="/teacher/attendance/take?class_id=<?php echo $class['id']; ?>" 
-                                               class="btn btn-success btn-sm">
+                                               class="btn btn-success">
                                                 <i class="fas fa-user-check me-2"></i>
                                                 Prendre la présence
                                             </a>
-                                            <a href="/teacher/create-work?class_id=<?php echo $class['id']; ?>" 
-                                               class="btn btn-primary btn-sm">
-                                                <i class="fas fa-file-alt me-2"></i>
-                                                Créer un devoir
+                                            <a href="/teacher/attendance/stats?class_id=<?php echo $class['id']; ?>" 
+                                               class="btn btn-info">
+                                                <i class="fas fa-chart-bar me-2"></i>
+                                                Voir les statistiques
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="col-12">
-                            <div class="alert alert-info text-center">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Vous n'avez aucune classe créée pour le moment. 
-                                Utilisez le formulaire ci-dessus pour créer votre première classe.
-                            </div>
-                        </div>
                     <?php endif; ?>
                 </div>
             </div>

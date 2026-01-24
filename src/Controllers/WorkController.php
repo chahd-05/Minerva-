@@ -2,34 +2,32 @@
 namespace App\Controllers;
 
 use App\Services\WorkService;
+use App\Services\AuthService;
 
 class WorkController {
     private $workService;
     private $classModel;
+    private $authService;
 
     public function __construct() {
         $this->workService = new WorkService();
-
+        $this->authService = new AuthService();
     }
 
     public function createForm() {
-        
-        if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'teacher') {
-            header('Location: /login');
-            exit;
-        }
+        $this->authService->requireRole('teacher');
     
         $classModel = new \App\Models\ClassRoom();
         $classes = $classModel->findByTeacherId($_SESSION['user_id']);
         
-        require __DIR__ . '/../Views/teacher/create_work.php';
+        // Pre-select class if class_id is provided
+        $selectedClassId = $_GET['class_id'] ?? null;
+        
+        include __DIR__ . '/../Views/teacher/create_work.php';
     }
 
     public function store() {
-        if (!isset($_SESSION['user_name']) || $_SESSION['role'] !== 'teacher') {
-            header('Location: /login');
-            exit;
-        }
+        $this->authService->requireRole('teacher');
 
         $classroom_id = $_POST['classroom_id'];
         $title        = $_POST['title'];
@@ -52,7 +50,7 @@ class WorkController {
             $_SESSION['error'] = $e->getMessage();
         }
 
-        header('Location: /teacher/creatework');
+        header('Location: /teacher/create-work');
         exit;
     }
 }

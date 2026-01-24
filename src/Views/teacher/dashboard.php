@@ -1,60 +1,238 @@
+<?php
+$userRole = $_SESSION['role'] ?? '';
+$userName = $_SESSION['user_name'] ?? '';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord - Enseignant</title>
+    <title>Tableau de bord - Enseignant - Minerva</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
-        .header { background: #007bff; color: white; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .welcome { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
-        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .card h3 { color: #333; margin-bottom: 15px; }
-        .card a { text-decoration: none; color: #333; }
-        .card a:hover h3 { color: #007bff; }
-        .logout { float: right; background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 5px; }
-        .logout:hover { background: #c82333; }
+        .navbar-brand {
+            font-weight: bold;
+            color: #667eea !important;
+        }
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .role-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .dashboard-card {
+            transition: transform 0.2s;
+            height: 100%;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+        }
+        .dashboard-card .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+        .dashboard-card .card-body {
+            padding: 1.5rem;
+        }
+        .dashboard-card .card-text {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+        .dashboard-card .btn {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <div class="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container">
-            <h1>🎓 Minerva - Espace Enseignant</h1>
-            <a href="/logout" class="logout">Déconnexion</a>
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Minerva
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="user-info">
+                    <span class="badge bg-primary role-badge"><?php echo htmlspecialchars($userRole); ?></span>
+                    <span><?php echo htmlspecialchars($userName); ?></span>
+                    <a href="/logout" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Tableau de bord
+                    </h2>
+                </div>
+
+                <?php if (isset($_SESSION['success'])): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?php 
+                        echo htmlspecialchars($_SESSION['success']); 
+                        unset($_SESSION['success']);
+                        ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?php 
+                        echo htmlspecialchars($_SESSION['error']); 
+                        unset($_SESSION['error']);
+                        ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-chalkboard me-2"></i>
+                                Classes
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Créez et suivez des classes.</p>
+                                <a href="/teacher/classrooms" class="btn btn-primary">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Gérer les classes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-comments me-2"></i>
+                                Chat de classe
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Discutez avec vos étudiants.</p>
+                                <a href="/chat" class="btn btn-info">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Accéder au chat
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-user-check me-2"></i>
+                                Présence
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Prenez la présence et consultez les statistiques.</p>
+                                <a href="/teacher/attendance" class="btn btn-warning">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Gérer la présence
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Statistiques
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Voyez les statistiques sur vos classes et étudiants.</p>
+                                <a href="/teacher/statistics" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Voir les statistiques
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Créer étudiants
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Créez des comptes étudiants.</p>
+                                <a href="/teacher/students/create" class="btn btn-primary">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Créer un étudiant
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-file-alt me-2"></i>
+                                Créer un devoir
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Créez de nouveaux devoirs pour vos classes.</p>
+                                <a href="/teacher/create-work" class="btn btn-success">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Créer un devoir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-tasks me-2"></i>
+                                Assigner un devoir
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Assignez les devoirs aux étudiants.</p>
+                                <a href="/teacher/assignwork" class="btn btn-info">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Assigner un devoir
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <i class="fas fa-graduation-cap me-2"></i>
+                                Noter les travaux
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Notez les travaux soumis par vos étudiants.</p>
+                                <a href="/teacher/grade" class="btn btn-warning">
+                                    <i class="fas fa-arrow-right me-2"></i>
+                                    Noter les travaux
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="container">
-        <div class="welcome">
-            <h2>Bonjour <?= htmlspecialchars($user['name']) ?> ! 👋</h2>
-            <p>Bienvenue sur votre tableau de bord. Vous êtes connecté en tant qu'enseignant.</p>
-        </div>
-        
-        <div class="cards">
-            <div class="card">
-                <a href="/teacher/classrooms"><h3>📚 Classes</h3></a>
-                <p>Créez et suivez des classes.</p>
-            </div>
-            <div class="card">
-                <a href="/teacher/students/create"><h3>👥 Étudiants</h3></a>
-                <p>Créez des comptes étudiants.</p>
-            </div>
-            <div class="card">
-                <a href="/teacher/creatework"><h3>📝 Créer un devoir</h3></a>
-                <p>Créez de nouveaux devoirs pour vos classes.</p>
-            </div>
-            <div class="card">
-                <a href="/teacher/assignwork"><h3>🎯 Assigner un devoir</h3></a>
-                <p>Assignez les devoirs aux étudiants.</p>
-            </div>
-            <div class="card">
-                <a href="/teacher/grade"><h3>📊 Noter les travaux</h3></a>
-                <p>Notez les travaux soumis par vos étudiants.</p>
-            </div>
-        </div>
-    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

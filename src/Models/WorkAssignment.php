@@ -9,9 +9,22 @@ class WorkAssignment {
     }
 
     public function assignToStudent($work_id, $student_id) {
+        // Vérifier si déjà assigné
+        if ($this->isAlreadyAssigned($work_id, $student_id)) {
+            return true; // Déjà assigné, pas d'erreur
+        }
+        
         $stmt = $this->db->prepare(
             "INSERT INTO work_assignments (work_id, student_id)
              VALUES (?, ?)"
+        );
+        return $stmt->execute([$work_id, $student_id]);
+    }
+    
+    // Retirer l'assignment d'un travail à un étudiant
+    public function removeAssignment($work_id, $student_id) {
+        $stmt = $this->db->prepare(
+            "DELETE FROM work_assignments WHERE work_id = ? AND student_id = ?"
         );
         return $stmt->execute([$work_id, $student_id]);
     }
@@ -97,15 +110,27 @@ class WorkAssignment {
         return $stmt->fetchColumn() > 0;
     }
 
-    // Récupérer les étudiants d'une classe
-    public function getStudentsByClass($class_id) {
-        $stmt = $this->db->prepare(
-            "SELECT u.id, u.name 
-             FROM users u
-             JOIN classroom_students cs ON u.id = cs.student_id
-             WHERE cs.classroom_id = ? AND u.role = 'student'"
-        );
-        $stmt->execute([$class_id]);
+    // Récupérer les étudiants d'une classe avec leur statut d'assignment
+    public function getStudentsByClass($class_id, $work_id = null) {
+        if ($work_id) {
+            $stmt = $this->db->prepare(
+                "SELECT u.id, u.name, 
+                        CASE WHEN wa.student_id IS NOT NULL THEN 1 ELSE 0 END as is_assigned
+                 FROM users u
+                 JOIN classroom_students cs ON u.id = cs.student_id
+                 LEFT JOIN work_assignments wa ON u.id = wa.student_id AND wa.work_id = ?
+                 WHERE cs.classroom_id = ? AND u.role = 'student'"
+            );
+            $stmt->execute([$work_id, $class_id]);
+        } else {
+            $stmt = $this->db->prepare(
+                "SELECT u.id, u.name, 0 as is_assigned
+                 FROM users u
+                 JOIN classroom_students cs ON u.id = cs.student_id
+                 WHERE cs.classroom_id = ? AND u.role = 'student'"
+            );
+            $stmt->execute([$class_id]);
+        }
         return $stmt->fetchAll();
     }
 

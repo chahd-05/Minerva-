@@ -29,4 +29,19 @@ class Work {
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
+    
+    public function getTeacherAssignedWorks($teacher_id) {
+        $stmt = $this->db->prepare(
+            "SELECT w.*, c.name as classroom_name,
+                    COUNT(DISTINCT wa.student_id) as assigned_students
+             FROM works w
+             JOIN classrooms c ON w.classroom_id = c.id
+             LEFT JOIN work_assignments wa ON w.id = wa.work_id
+             WHERE c.teacher_id = ?
+             GROUP BY w.id, c.name
+             ORDER BY w.created_at DESC"
+        );
+        $stmt->execute([$teacher_id]);
+        return $stmt->fetchAll();
+    }
 }
